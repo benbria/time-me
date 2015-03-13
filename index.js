@@ -37,17 +37,19 @@ exports.async = function(options, fn) {
     var index = options.index,
     noLog = !!options.noLog;
     msg = options.msg || msg;
-    return function() {
+    var __timee__ = function() {
         var length = arguments.length,
         args = 1 <= length ? [].slice.call(arguments, 0) : [];
         if (!index) index = length - 1;
         args.splice(index, 1, getInjector({
             msg: msg,
             noLog: noLog,
-            watch: new HRStopwatch()
+            watch: new HRStopwatch(),
+            __timee__: __timee__
         }, args[index]));
         fn.apply(this, args);
     }
+    return __timee__;
 }
 
 /*
@@ -56,6 +58,7 @@ exports.async = function(options, fn) {
 function getInjector(options, cb) {
     return function() {
         var elapsed = Math.round(timeunit.nanoseconds.toMillis(options.watch.getTime()));
+        options.__timee__.lastTime = elapsed;
         if (!options.noLog) log(options.msg + " " + elapsed + "ms");
         cb.apply(this, arguments);
     }

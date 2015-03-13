@@ -11,6 +11,7 @@ describe 'async - coffee and streamline', ->
                 , t
             foo (err, result) ->
                 expect(result).to.equal(2)
+                expect(foo.lastTime).to.be.at.least(t)
                 done()
 
     describe 'streamline', ->
@@ -22,3 +23,4 @@ describe 'async - coffee and streamline', ->
 
             res = foo 1, 2, 3, _
             expect(res).to.equal(6)
+            expect(foo.lastTime).to.be.at.least(t)

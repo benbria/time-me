@@ -17,7 +17,10 @@ describe('async', function() {
                     cb(null, '25');
                 }, t);
             });
-            foo.call(null, done);
+            foo.call(null, function() {
+                expect(foo.lastTime).to.be.at.least(t);
+                done();
+            });
         });
 
         it('({msg, index}, cb)', function(done) {
@@ -29,7 +32,8 @@ describe('async', function() {
             });
             bar.call(null, 1, function(err, result) {
                 expect(result).to.eq(3);
-                done()
+                expect(bar.lastTime).to.be.at.least(t);
+                done();
             }, 2);
         });
 
@@ -48,7 +52,8 @@ describe('async', function() {
             timeMe.configure({log: spy});
             dontLogMe.call(null, function(err, result) {
                 expect(spy.called).to.not.be.ok;
-                done()
+                expect(dontLogMe.lastTime).to.be.at.least(t);
+                done();
             });
         });
 
@@ -60,7 +65,8 @@ describe('async', function() {
                 }, t);
             });
             baz.call(null, function(err, result) {
-                done()
+                expect(baz.lastTime).to.be.at.least(t);
+                done();
             });
         });
 
@@ -75,7 +81,8 @@ describe('async', function() {
                 }, t);
             });
             baz.call(null, function(err, result) {
-                done()
+                expect(baz.lastTime).to.be.at.least(t);
+                done();
             });
         });
     });
@@ -91,6 +98,7 @@ describe('async', function() {
             });
             foo.call({x: 1}, function(err, result) {
                 expect(this.x).to.equal(1);
+                expect(foo.lastTime).to.be.at.least(t);
                 done();
             });
         });
