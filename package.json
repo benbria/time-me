@@ -1,0 +1,28 @@
+{
+  "name": "time-me",
+  "version": "0.0.1",
+  "description": "Time a block of code with minimal effort. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha"
+  },
+  "keywords": [
+    "time",
+    "function",
+    "performance",
+    "async"
+  ],
+  "author": "calvin.wiebe@gmail.com",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^2.1.1",
+    "coffee-script": "^1.9.1",
+    "mocha": "^2.2.1",
+    "sinon": "^1.13.0",
+    "streamline": "^0.10.17"
+  },
+  "dependencies": {
+    "hrstopwatch": "^1.0.0",
+    "timeunit": "^1.1.1"
+  }
+}
