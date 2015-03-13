@@ -39,7 +39,7 @@ exports.async = function(options, fn) {
     msg = options.msg || msg;
     var __timee__ = function() {
         var length = arguments.length,
-        args = 1 <= length ? [].slice.call(arguments, 0) : [];
+        args = 1 <= length ? sliceArgs(arguments) : [];
         if (!index) index = length - 1;
         args.splice(index, 1, getInjector({
             msg: msg,
@@ -70,4 +70,16 @@ function getInjector(options, cb) {
 function invalid(msg) {
     console.warn("timeMe: function won't be timed: " + msg);
     return function(){};
+}
+
+/*
+* convert an arguments object into an array. We do it this way because
+* mdn warns us not to use Array.prototype.slice.
+*/
+function sliceArgs(args) {
+    var array = [];
+    for (prop in args) {
+        array.push(args[prop]);
+    }
+    return array;
 }
