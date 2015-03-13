@@ -24,3 +24,13 @@ describe 'async - coffee and streamline', ->
             res = foo 1, 2, 3, _
             expect(res).to.equal(6)
             expect(foo.lastTime).to.be.at.least(t)
+
+        it 'should work with streamline cb in a different position than last', (_) ->
+            t = Math.lOOms()
+            foo = timeMe.async {index: 1}, (a, _, b, c) ->
+                setTimeout _, t
+                return a + b + c
+
+            res = foo 1, _, 2, 3
+            expect(res).to.equal(6)
+            expect(foo.lastTime).to.be.at.least(t)
