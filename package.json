@@ -1,7 +1,7 @@
 {
   "name": "time-me",
   "version": "0.0.1",
-  "description": "Time a block of code with minimal effort. ",
+  "description": "Time a block of code with minimal effort.",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha"
