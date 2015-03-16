@@ -12,7 +12,7 @@ to print it out, or query the function for its `lastTime`.
 
 # Usage
 
-```
+```javascript
 var foo = timeMe.async('foo()', function(cb) {
     setTimeout(function() {
         cb(null, '25');
@@ -33,7 +33,7 @@ foo(function(err, result) {
 Globally configure the module on what log function to use. Defaults to
 `console.log`
 
-```
+```javascript
 timeMe.configure({
     log: function(msg) { // do logging here }
 });
@@ -45,7 +45,7 @@ timeMe.configure({
 
 Both methods can be called like so
 
-```
+```javascript
 timeMe.async('a prefex', fn);
 timeMe.async(fn); // default prefix of `timeMe`
 timeMe.async({msg: 'foo()', index: 1}, fn); // options hash for more fine grained control
