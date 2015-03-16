@@ -35,7 +35,7 @@ Globally configure the module on what log function to use. Defaults to
 
 ```
 timeMe.configure({
-    log: function() { // do logging here }
+    log: function(msg) { // do logging here }
 });
 ```
 
