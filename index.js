@@ -1,6 +1,7 @@
 var HRStopwatch = require('hrstopwatch')
 , timeunit = require ('timeunit')
 , log = console.log
+, logObject = false
 , DEFAULT_PREFIX = "timeMe";
 
 /*
@@ -11,6 +12,7 @@ var HRStopwatch = require('hrstopwatch')
 exports.configure = function(options) {
     options = options || {};
     log = options.log;
+    logObject = !!options.logObject || false
 }
 
 exports.async = function(options, fn) {
@@ -19,6 +21,16 @@ exports.async = function(options, fn) {
 
 exports.sync = function(options, fn) {
     return timeMe(false, options, fn);
+}
+
+function logMsg(options, msg, elapsed) {
+    if (!options.noLog) {
+        if (logObject) {
+            log({msg: msg, elapsed: elapsed});
+        } else {
+            log(msg + " " + elapsed + "ms");
+        }
+    }
 }
 
 /*
@@ -67,7 +79,7 @@ function timeMe(async, options, fn) {
             result = fn.apply(this, arguments);
             elapsed = getTime(watch);
             __timee__.lastTime = elapsed;
-            if (!options.noLog) log(msg + " " + elapsed + "ms");
+            logMsg(options, msg, elapsed);
             return result;
         }
     }
@@ -81,7 +93,7 @@ function getInjector(options, cb) {
     return function() {
         var elapsed = getTime(options.watch);
         options.__timee__.lastTime = elapsed;
-        if (!options.noLog) log(options.msg + " " + elapsed + "ms");
+        logMsg(options, options.msg, elapsed);
         cb.apply(this, arguments);
     }
 }

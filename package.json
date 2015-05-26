@@ -1,6 +1,6 @@
 {
   "name": "time-me",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "description": "Time a block of code with minimal effort.",
   "main": "index.js",
   "dependencies": {
@@ -36,7 +36,8 @@
     "url": "benbria.com"
   },
   "contributors": [
-    "Calvin Wiebe <calvin.wiebe@gmail.com> (https://github.com/calvinwiebe)"
+    "Calvin Wiebe <calvin.wiebe@gmail.com> (https://github.com/calvinwiebe)",
+    "Bernard Llanos (https://github.com/bllanos)"
   ],
   "license": "MIT"
 }
