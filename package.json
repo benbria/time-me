@@ -12,7 +12,8 @@
     "coffee-script": "^1.9.1",
     "mocha": "^2.2.1",
     "sinon": "^1.13.0",
-    "streamline": "^0.10.17"
+    "streamline": "^0.10.17",
+    "lodash": "^3.9.3"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha"

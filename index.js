@@ -12,7 +12,7 @@ var HRStopwatch = require('hrstopwatch')
 exports.configure = function(options) {
     options = options || {};
     log = options.log;
-    logObject = !!options.logObject || false
+    logObject = !!options.logObject || false;
 }
 
 exports.async = function(options, fn) {
