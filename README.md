@@ -30,12 +30,25 @@ foo(function(err, result) {
 
 ## `timeMe.configure`
 
-Globally configure the module on what log function to use. Defaults to
-`console.log`
+Globally configure the module.
 
 ```javascript
 timeMe.configure({
+
+	// The logging function to use for output.
+	// Defaults to `console.log`.
     log: function(msg) { // do logging here }
+
+    // If `true`, instead of a string, the `log()` function will be passed
+    // an object of the form:
+    // ```
+    // {
+    //     prefix: string // prefix message
+    //     elapsed: number // elapsed time in milliseconds
+    // }
+    // ```
+    // defaults to `false`
+    logObject: false
 });
 ```
 

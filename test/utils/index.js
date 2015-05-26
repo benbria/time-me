@@ -25,7 +25,7 @@ exports.stubLogger = function() {
                     expect(arguments).to.have.length(1);
                     if (logObject === true) {
                         expect(arg).to.be.a('object');
-                        prefix = arg.msg;
+                        prefix = arg.prefix;
                         elapsed = arg.elapsed;
                     } else {
                         expect(arg).to.be.a('string');

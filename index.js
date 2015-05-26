@@ -26,7 +26,7 @@ exports.sync = function(options, fn) {
 function logMsg(options, msg, elapsed) {
     if (!options.noLog) {
         if (logObject) {
-            log({msg: msg, elapsed: elapsed});
+            log({prefix: msg, elapsed: elapsed});
         } else {
             log(msg + " " + elapsed + "ms");
         }
