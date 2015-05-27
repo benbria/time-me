@@ -1,7 +1,6 @@
 var HRStopwatch = require('hrstopwatch')
 , timeunit = require ('timeunit')
 , log = console.log
-, logObject = false
 , DEFAULT_PREFIX = "timeMe";
 
 /*
@@ -12,7 +11,6 @@ var HRStopwatch = require('hrstopwatch')
 exports.configure = function(options) {
     options = options || {};
     log = options.log;
-    logObject = !!options.logObject || false;
 }
 
 exports.async = function(options, fn) {
@@ -24,13 +22,8 @@ exports.sync = function(options, fn) {
 }
 
 function logMsg(options, msg, elapsed) {
-    logStr = msg + " " + elapsed + "ms";
     if (!options.noLog) {
-        if (logObject) {
-            log(logStr, {prefix: msg, elapsed: elapsed});
-        } else {
-            log(logStr);
-        }
+        log(msg + " " + elapsed + "ms", {prefix: msg, elapsed: elapsed});
     }
 }
 

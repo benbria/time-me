@@ -3,31 +3,26 @@ var expect = require('chai').expect
 , sinon  = require('sinon')
 , stubLogger = require('./utils').stubLogger;
 
-var logObjectValues = [true, false];
+describe('sync', function() {
 
-logObjectValues.forEach( function(logObject) {
+    beforeEach(function() {
+        stubLogger.attach();
+    });
 
-    describe('sync, logObject = ' + logObject, function() {
-
-        beforeEach(function() {
-            stubLogger.attach({logObject: logObject});
-        });
-
-        it('should time a sync function', function() {
-            var msg = 'baz()';
-            stubLogger.setMsg(msg);
-            baz = timeMe.sync(msg, function(x) {
-                var a = [];
-                for(var i=0; i < 100000; i++) {
-                    a.push(i);
-                }
-                a.map(function(elem) {
-                    return "The number is " + elem;
-                });
-                return a.join(",");
+    it('should time a sync function', function() {
+        var msg = 'baz()';
+        stubLogger.setMsg(msg);
+        baz = timeMe.sync(msg, function(x) {
+            var a = [];
+            for(var i=0; i < 100000; i++) {
+                a.push(i);
+            }
+            a.map(function(elem) {
+                return "The number is " + elem;
             });
-            var result = baz.call(null, 1);
-            expect(baz.lastTime).to.be.ok;
+            return a.join(",");
         });
+        var result = baz.call(null, 1);
+        expect(baz.lastTime).to.be.ok;
     });
 });

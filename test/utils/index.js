@@ -18,19 +18,14 @@ exports.stubLogger = function() {
         },
 
         attach: function(options) {
-            var logObject = options.logObject || false;
             timeMe.configure(ld.assign({}, options, {
                 log: function(str, obj) {
                     var prefix = [], elapsed = [];
-
-                    if (logObject === true) {
-                        expect(arguments).to.have.length(2);
-                        expect(obj).to.be.a('object');
-                        prefix.push(obj.prefix);
-                        elapsed.push(obj.elapsed);
-                    } else {
-                        expect(arguments).to.have.length(1);
-                    }
+                    expect(arguments).to.have.length(2);
+                    
+                    expect(obj).to.be.a('object');
+                    prefix.push(obj.prefix);
+                    elapsed.push(obj.elapsed);
 
                     expect(str).to.be.a('string');
                     var msgParts = str.split(' ');

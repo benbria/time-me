@@ -30,27 +30,24 @@ foo(function(err, result) {
 
 ## `timeMe.configure`
 
-Globally configure the module.
+Globally configure the module on what log function to use. Defaults to
+`console.log`
 
 ```javascript
 timeMe.configure({
-
-    // The logging function to use for output.
-    // Defaults to `console.log`.
-    log: function(msg) { // do logging here }
-
-    // If `true`, in addition to a string, the `log()` function
-    // will be passed an object of the form:
-    // ```
-    // {
-    //     prefix: string // prefix message
-    //     elapsed: number // elapsed time in milliseconds
-    // }
-    // ```
-    // defaults to `false`
-    logObject: false
+    log: function(msg, obj) { // do logging here }
 });
 ```
+
+The configured logging function will be passed two arguments:
+1. A string containing the message used to name the call, and the call time.
+2. An object containing the same information, of the form
+   ```javascript
+   {
+       prefix: string // prefix message
+       elapsed: number // elapsed time in milliseconds
+   }
+   ```
 
 ## `timeMe.async`
 
