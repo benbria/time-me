@@ -35,12 +35,12 @@ Globally configure the module.
 ```javascript
 timeMe.configure({
 
-	// The logging function to use for output.
-	// Defaults to `console.log`.
+    // The logging function to use for output.
+    // Defaults to `console.log`.
     log: function(msg) { // do logging here }
 
-    // If `true`, instead of a string, the `log()` function will be passed
-    // an object of the form:
+    // If `true`, in addition to a string, the `log()` function
+    // will be passed an object of the form:
     // ```
     // {
     //     prefix: string // prefix message
@@ -83,5 +83,3 @@ Turn logs on or off. Defaults to `false` (meaning logging on).
 
 Whenever a wrapped function is called, additionally to logging the time, a property will
 be set on the function: `lastTime`. You can query the function for the property.
-
-

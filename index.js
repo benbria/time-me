@@ -24,11 +24,12 @@ exports.sync = function(options, fn) {
 }
 
 function logMsg(options, msg, elapsed) {
+    logStr = msg + " " + elapsed + "ms";
     if (!options.noLog) {
         if (logObject) {
-            log({prefix: msg, elapsed: elapsed});
+            log(logStr, {prefix: msg, elapsed: elapsed});
         } else {
-            log(msg + " " + elapsed + "ms");
+            log(logStr);
         }
     }
 }

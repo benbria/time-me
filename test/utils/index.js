@@ -10,36 +10,42 @@ Math.lOOms = function() {
 }
 
 exports.stubLogger = function() {
-	var msg = null;
+    var msg = null;
 
-	return {
-		setMsg: function(newMsg) {
-			msg = newMsg;
-		},
+    return {
+        setMsg: function(newMsg) {
+            msg = newMsg;
+        },
 
-		attach: function(options) {
-			var logObject = options.logObject || false;
+        attach: function(options) {
+            var logObject = options.logObject || false;
             timeMe.configure(ld.assign({}, options, {
-                log: function(arg) {
-                    var prefix, elapsed;
-                    expect(arguments).to.have.length(1);
+                log: function(str, obj) {
+                    var prefix = [], elapsed = [];
+
                     if (logObject === true) {
-                        expect(arg).to.be.a('object');
-                        prefix = arg.prefix;
-                        elapsed = arg.elapsed;
+                        expect(arguments).to.have.length(2);
+                        expect(obj).to.be.a('object');
+                        prefix.push(obj.prefix);
+                        elapsed.push(obj.elapsed);
                     } else {
-                        expect(arg).to.be.a('string');
-                        var msgParts = arg.split(' ');
-                        var timeStr = msgParts[msgParts.length - 1];
-                        elapsed = parseInt(timeStr.slice(0, -2));
-                        prefix = msgParts.slice(0, -1).join(' ');
+                        expect(arguments).to.have.length(1);
                     }
-                    expect(prefix).to.eql(msg);
-                    expect(elapsed).to.be.a('number');
-                    expect(elapsed).to.be.at.least(0);
+
+                    expect(str).to.be.a('string');
+                    var msgParts = str.split(' ');
+                    var timeStr = msgParts[msgParts.length - 1];
+                    elapsed.push(parseInt(timeStr.slice(0, -2)));
+                    prefix.push(msgParts.slice(0, -1).join(' '));
+
+                    for(var i = 0; i < arguments.length; ++i) {
+                        expect(prefix[i]).to.eql(msg);
+                        expect(elapsed[i]).to.be.a('number');
+                        expect(elapsed[i]).to.be.at.least(0);
+                    }
                 }
             }
             ));
-		}
-	};
+        }
+    };
 }();
