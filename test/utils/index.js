@@ -9,6 +9,18 @@ Math.lOOms = function() {
     return parseInt(Math.random() * 100);
 }
 
+/*
+* The `attach()` method of the returned object
+* configures the time-me module to use a stub
+* logging function that validates the arguments
+* it is called on.
+*
+* Aside from checking the types and structures
+* of its arguments, the stub logger also ensures
+* that the correct prefix is being logged.
+* For this to work, it must know what prefix is expected.
+* The client must set this using the `setMsg()` method.
+*/
 exports.stubLogger = function() {
     var msg = null;
 
@@ -22,7 +34,7 @@ exports.stubLogger = function() {
                 log: function(str, obj) {
                     var prefix = [], elapsed = [];
                     expect(arguments).to.have.length(2);
-                    
+
                     expect(obj).to.be.a('object');
                     prefix.push(obj.prefix);
                     elapsed.push(obj.elapsed);
