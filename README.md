@@ -40,8 +40,10 @@ timeMe.configure({
 ```
 
 The configured logging function will be passed two arguments:
+
 1. A string containing the message used to name the call, and the call time.
 2. An object containing the same information, of the form
+
    ```javascript
    {
        prefix: string // prefix message
