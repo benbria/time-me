@@ -1,7 +1,13 @@
 {expect} = require 'chai'
 timeMe   = require '../'
+stubLogger = require('./utils').stubLogger
 
 describe 'async - coffee and streamline', ->
+
+    beforeEach ->
+        stubLogger.attach()
+        stubLogger.setMsg 'timeMe'
+
     describe 'coffee', ->
         it 'should work with coffee', (done) ->
             t = Math.lOOms()

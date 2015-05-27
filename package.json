@@ -1,6 +1,6 @@
 {
   "name": "time-me",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "description": "Time a block of code with minimal effort.",
   "main": "index.js",
   "dependencies": {
@@ -12,7 +12,8 @@
     "coffee-script": "^1.9.1",
     "mocha": "^2.2.1",
     "sinon": "^1.13.0",
-    "streamline": "^0.10.17"
+    "streamline": "^0.10.17",
+    "lodash": "^3.9.3"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha"
@@ -36,7 +37,8 @@
     "url": "benbria.com"
   },
   "contributors": [
-    "Calvin Wiebe <calvin.wiebe@gmail.com> (https://github.com/calvinwiebe)"
+    "Calvin Wiebe <calvin.wiebe@gmail.com> (https://github.com/calvinwiebe)",
+    "Bernard Llanos (https://github.com/bllanos)"
   ],
   "license": "MIT"
 }

@@ -1,10 +1,18 @@
 var expect = require('chai').expect
 , timeMe = require('../')
-, sinon  = require('sinon');
+, sinon  = require('sinon')
+, stubLogger = require('./utils').stubLogger;
 
 describe('sync', function() {
+
+    beforeEach(function() {
+        stubLogger.attach();
+    });
+
     it('should time a sync function', function() {
-        baz = timeMe.sync('baz()', function(x) {
+        var msg = 'baz()';
+        stubLogger.setMsg(msg);
+        baz = timeMe.sync(msg, function(x) {
             var a = [];
             for(var i=0; i < 100000; i++) {
                 a.push(i);

@@ -21,6 +21,12 @@ exports.sync = function(options, fn) {
     return timeMe(false, options, fn);
 }
 
+function logMsg(options, msg, elapsed) {
+    if (!options.noLog) {
+        log(msg + " " + elapsed + "ms", {prefix: msg, elapsed: elapsed});
+    }
+}
+
 /*
 * Wrap an async/sync function so that its total execution time
 * can be recorded.
@@ -67,7 +73,7 @@ function timeMe(async, options, fn) {
             result = fn.apply(this, arguments);
             elapsed = getTime(watch);
             __timee__.lastTime = elapsed;
-            if (!options.noLog) log(msg + " " + elapsed + "ms");
+            logMsg(options, msg, elapsed);
             return result;
         }
     }
@@ -81,7 +87,7 @@ function getInjector(options, cb) {
     return function() {
         var elapsed = getTime(options.watch);
         options.__timee__.lastTime = elapsed;
-        if (!options.noLog) log(options.msg + " " + elapsed + "ms");
+        logMsg(options, options.msg, elapsed);
         cb.apply(this, arguments);
     }
 }

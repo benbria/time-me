@@ -1,18 +1,21 @@
 var expect = require('chai').expect
 , timeMe = require('../')
-, sinon  = require('sinon');
+, sinon  = require('sinon')
+, stubLogger = require('./utils').stubLogger;
 
 describe('async', function() {
 
     beforeEach(function() {
-        timeMe.configure({log: console.log});
+        stubLogger.attach();
     });
 
     describe('argument acception', function() {
 
         it('(msg, cb)', function(done) {
+            var msg = 'foo()';
+            stubLogger.setMsg(msg);
             var t = Math.lOOms(),
-            foo = timeMe.async('foo()', function(cb) {
+            foo = timeMe.async(msg, function(cb) {
                 setTimeout(function() {
                     cb(null, '25');
                 }, t);
@@ -24,8 +27,10 @@ describe('async', function() {
         });
 
         it('({msg, index}, cb)', function(done) {
+            var msg = 'bar()';
+            stubLogger.setMsg(msg);
             var t = Math.lOOms(),
-            bar = timeMe.async({msg: 'bar()', index: 1}, function(x, cb, y) {
+            bar = timeMe.async({msg: msg, index: 1}, function(x, cb, y) {
                 setTimeout(function() {
                     cb(null, x + y);
                 }, t);
@@ -43,7 +48,6 @@ describe('async', function() {
             dontLogMe = timeMe.async({
                 msg: 'dontLogMe()',
                 noLog: 1,
-                log: spy
             }, function(cb) {
                 setTimeout(function() {
                     cb(null, 1);
@@ -58,6 +62,8 @@ describe('async', function() {
         });
 
         it('(cb)', function(done) {
+            var msg = 'timeMe';
+            stubLogger.setMsg(msg);
             var t = Math.lOOms(),
             baz = timeMe.async(function(cb) {
                 setTimeout(function() {
@@ -89,8 +95,10 @@ describe('async', function() {
 
     describe('keep the calling context', function() {
         it('should keep the context of this', function(done) {
+            var msg = 'foo()';
+            stubLogger.setMsg(msg);
             var t = Math.lOOms(),
-            foo = timeMe.async('foo()', function(cb) {
+            foo = timeMe.async(msg, function(cb) {
                 var self = this;
                 setTimeout(function() {
                     cb.call(self, null, '25');
@@ -104,4 +112,3 @@ describe('async', function() {
         });
     });
 })
-

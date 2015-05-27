@@ -35,9 +35,19 @@ Globally configure the module on what log function to use. Defaults to
 
 ```javascript
 timeMe.configure({
-    log: function(msg) { // do logging here }
+    log: function(msg, obj) { // do logging here }
 });
 ```
+
+The configured logging function will be passed two arguments:
+1. A string containing the message used to name the call, and the call time.
+2. An object containing the same information, of the form
+   ```javascript
+   {
+       prefix: string // prefix message
+       elapsed: number // elapsed time in milliseconds
+   }
+   ```
 
 ## `timeMe.async`
 
@@ -70,5 +80,3 @@ Turn logs on or off. Defaults to `false` (meaning logging on).
 
 Whenever a wrapped function is called, additionally to logging the time, a property will
 be set on the function: `lastTime`. You can query the function for the property.
-
-
