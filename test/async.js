@@ -100,12 +100,13 @@ describe('async', function() {
             var t = Math.lOOms(),
             foo = timeMe.async(msg, function(cb) {
                 var self = this;
+                expect(this.x).to.eq(1);
                 setTimeout(function() {
                     cb.call(self, null, '25');
                 }, t);
             });
             foo.call({x: 1}, function(err, result) {
-                expect(this.x).to.equal(1);
+                expect(this.x).to.eq(1);
                 expect(foo.lastTime).to.be.at.least(t);
                 done();
             });

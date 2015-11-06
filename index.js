@@ -1,5 +1,6 @@
 var HRStopwatch = require('hrstopwatch')
 , timeunit = require ('timeunit')
+, intercept = require('intercept')
 , log = console.log
 , DEFAULT_PREFIX = "timeMe";
 
@@ -55,41 +56,29 @@ function timeMe(async, options, fn) {
     noLog = !!options.noLog,
     __timee__;
     if (async) {
-        __timee__ = function() {
-            var length = arguments.length,
-            args = 1 <= length ? sliceArgs(arguments) : [];
-            if (!index) index = length - 1;
-            args.splice(index, 1, getInjector({
-                msg: msg,
-                noLog: noLog,
-                watch: new HRStopwatch(),
-                __timee__: __timee__
-            }, args[index]));
-            fn.apply(this, args);
-        }
+        var watch;
+        __timee__ = intercept.async(fn, {index: index}, function() {
+            var args = sliceArgs(arguments);
+            watch = new HRStopwatch();
+            return args[0].apply(this, sliceArgs(args, 1));
+        }, function() {
+            var args = sliceArgs(arguments);
+            var elapsed = getTime(watch);
+            __timee__.lastTime = elapsed;
+            logMsg({noLog: noLog}, msg, elapsed);
+            args[0].apply(this, sliceArgs(args, 1));
+        });
     } else {
-        __timee__ = function() {
-            var watch = new HRStopwatch(),
-            result = fn.apply(this, arguments);
+        __timee__ = intercept.sync(fn, function() {
+            var watch = new HRStopwatch()
+            var result = fn.apply(this, arguments);
             elapsed = getTime(watch);
             __timee__.lastTime = elapsed;
             logMsg(options, msg, elapsed);
             return result;
-        }
+        });
     }
     return __timee__;
-}
-
-/*
-* The function to inject as the callback to the async timee.
-*/
-function getInjector(options, cb) {
-    return function() {
-        var elapsed = getTime(options.watch);
-        options.__timee__.lastTime = elapsed;
-        logMsg(options, options.msg, elapsed);
-        cb.apply(this, arguments);
-    }
 }
 
 /*
@@ -111,10 +100,10 @@ function invalid(msg) {
 * convert an arguments object into an array. We do it this way because
 * mdn warns us not to use Array.prototype.slice.
 */
-function sliceArgs(args) {
+function sliceArgs(args, start) {
     var array = [];
     for (prop in args) {
-        array.push(args[prop]);
+        if (!start || +prop >= start) array.push(args[prop]);
     }
     return array;
 }
