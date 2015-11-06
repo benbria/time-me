@@ -15,11 +15,15 @@ exports.configure = function(options) {
 }
 
 exports.async = function(options, fn) {
-    return timeMe(true, options, fn);
+    return timeMe('async', options, fn);
 }
 
 exports.sync = function(options, fn) {
-    return timeMe(false, options, fn);
+    return timeMe('sync', options, fn);
+}
+
+exports.promise = function(options, fn) {
+    return timeMe('promise', options, fn);
 }
 
 function logMsg(options, msg, elapsed) {
@@ -39,7 +43,7 @@ function logMsg(options, msg, elapsed) {
 * `options.noLog` {Boolean} - (optional) whether to log out the message or not. Default is false.
 * `fn` {Function}   - the function to wrap and time
 */
-function timeMe(async, options, fn) {
+function timeMe(mode, options, fn) {
     var msg = DEFAULT_PREFIX;
     if ("string" === typeof options) {
         if ("function" !== typeof fn) {
@@ -55,7 +59,7 @@ function timeMe(async, options, fn) {
     var index = options.index,
     noLog = !!options.noLog,
     __timee__;
-    if (async) {
+    if ('async' === mode) {
         var watch;
         __timee__ = intercept.async(fn, {index: index}, function() {
             var args = sliceArgs(arguments);
@@ -68,15 +72,29 @@ function timeMe(async, options, fn) {
             logMsg({noLog: noLog}, msg, elapsed);
             args[0].apply(this, sliceArgs(args, 1));
         });
-    } else {
+    } else if ('sync' === mode) {
         __timee__ = intercept.sync(fn, function() {
-            var watch = new HRStopwatch()
+            var watch = new HRStopwatch();
             var result = fn.apply(this, arguments);
             elapsed = getTime(watch);
             __timee__.lastTime = elapsed;
             logMsg(options, msg, elapsed);
             return result;
         });
+    } else if ('promise' === mode) {
+        __timee__ = intercept.sync(fn, function() {
+            var watch = new HRStopwatch();
+            var p = fn.apply(this, arguments);
+            p.then(function(result) {
+                elapsed = getTime(watch);
+                __timee__.lastTime = elapsed;
+                logMsg(options, msg, elapsed);
+                return result;
+            });
+            return p;
+        });
+    } else {
+        throw new Error('Unknown mode: ' + mode);
     }
     return __timee__;
 }
