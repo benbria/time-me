@@ -3,6 +3,9 @@ var expect = require('chai').expect
 , sinon  = require('sinon')
 , stubLogger = require('./utils').stubLogger;
 
+// add Promise to our environment if it isn't available.
+global.Promise || require('es6-promise');
+
 describe.only('sync', function() {
 
     beforeEach(function() {

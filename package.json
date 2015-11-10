@@ -4,16 +4,18 @@
   "description": "Time a block of code with minimal effort.",
   "main": "index.js",
   "dependencies": {
+    "fn-intercept": "^1.0.0",
     "hrstopwatch": "^1.0.0",
     "timeunit": "^1.1.1"
   },
   "devDependencies": {
     "chai": "^2.1.1",
     "coffee-script": "^1.9.1",
+    "es6-promise": "^3.0.2",
+    "lodash": "^3.9.3",
     "mocha": "^2.2.1",
     "sinon": "^1.13.0",
-    "streamline": "^0.10.17",
-    "lodash": "^3.9.3"
+    "streamline": "^0.10.17"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha"

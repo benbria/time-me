@@ -1,6 +1,6 @@
 var HRStopwatch = require('hrstopwatch')
 , timeunit = require ('timeunit')
-, intercept = require('intercept')
+, intercept = require('fn-intercept')
 , log = console.log
 , DEFAULT_PREFIX = "timeMe";
 
