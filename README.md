@@ -10,21 +10,45 @@ is meant to help in that situation.
 `timeMe` Will take some options and a function to wrap. It will return the wrapped function. Everytime that function is executed, its time will be recorded. You can choose
 to print it out, or query the function for its `lastTime`.
 
+In the case of Promise based functions, `timeMe` will wait until the Promise resolves, log the time it took to resolve, and then pass the promise back.
+
 # Usage
 
 ```javascript
-var foo = timeMe.async('foo()', function(cb) {
-    setTimeout(function() {
-        cb(null, '25');
-    }, 2000);
-});
-foo(function(err, result) {
-    console.log(result);
+timeMe.configure({
+  log: function(msg, msgObj) { console.log(msg); }
 });
 
-// outputs: 25
-// and
+var foo = timeMe.async('foo()', function(cb) {
+  setTimeout(function() {
+      cb(null, '25');
+  }, 2000);
+});
+foo(function(err, result) {
+  console.log(result);
+});
+
+// outputs:
 // foo() 2000ms
+// 25
+
+
+// using with Promises
+var foo = timeMe.promise('foo()', function() {
+  return new Promise(function(res, rej) {
+    setTimeout(function() {
+      res('26');
+    }, 1000);
+  });
+});
+var p = foo();
+p.then(function(result) {
+  console.log(result);
+})
+
+// outputs:
+// foo() 1000ms
+// 26
 ```
 # Methods
 
@@ -35,7 +59,7 @@ Globally configure the module on what log function to use. Defaults to
 
 ```javascript
 timeMe.configure({
-    log: function(msg, obj) { // do logging here }
+  log: function(msg, obj) { // do logging here }
 });
 ```
 
@@ -55,12 +79,15 @@ The configured logging function will be passed two arguments:
 
 ## `timeMe.sync`
 
-Both methods can be called like so
+## `timeMe.promise`
+
+All three methods can be called like so
 
 ```javascript
 timeMe.async('a prefex', fn);
 timeMe.async(fn); // default prefix of `timeMe`
 timeMe.async({msg: 'foo()', index: 1}, fn); // options hash for more fine grained control
+timeMe.promise(promiseBasedFn);
 ```
 
 # Options

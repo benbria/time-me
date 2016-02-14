@@ -1,5 +1,6 @@
 var HRStopwatch = require('hrstopwatch')
 , timeunit = require ('timeunit')
+, intercept = require('fn-intercept')
 , log = console.log
 , DEFAULT_PREFIX = "timeMe";
 
@@ -14,11 +15,15 @@ exports.configure = function(options) {
 }
 
 exports.async = function(options, fn) {
-    return timeMe(true, options, fn);
+    return timeMe('async', options, fn);
 }
 
 exports.sync = function(options, fn) {
-    return timeMe(false, options, fn);
+    return timeMe('sync', options, fn);
+}
+
+exports.promise = function(options, fn) {
+    return timeMe('promise', options, fn);
 }
 
 function logMsg(options, msg, elapsed) {
@@ -38,7 +43,7 @@ function logMsg(options, msg, elapsed) {
 * `options.noLog` {Boolean} - (optional) whether to log out the message or not. Default is false.
 * `fn` {Function}   - the function to wrap and time
 */
-function timeMe(async, options, fn) {
+function timeMe(mode, options, fn) {
     var msg = DEFAULT_PREFIX;
     if ("string" === typeof options) {
         if ("function" !== typeof fn) {
@@ -54,42 +59,46 @@ function timeMe(async, options, fn) {
     var index = options.index,
     noLog = !!options.noLog,
     __timee__;
-    if (async) {
-        __timee__ = function() {
-            var length = arguments.length,
-            args = 1 <= length ? sliceArgs(arguments) : [];
-            if (!index) index = length - 1;
-            args.splice(index, 1, getInjector({
-                msg: msg,
-                noLog: noLog,
-                watch: new HRStopwatch(),
-                __timee__: __timee__
-            }, args[index]));
-            fn.apply(this, args);
-        }
-    } else {
-        __timee__ = function() {
-            var watch = new HRStopwatch(),
-            result = fn.apply(this, arguments);
-            elapsed = getTime(watch);
+    if ('async' === mode) {
+        var watch;
+        __timee__ = intercept.async(fn, {index: index}, function() {
+            var args = sliceArgs(arguments);
+            watch = new HRStopwatch();
+            return args[0].apply(this, sliceArgs(args, 1));
+        }, function() {
+            var args = sliceArgs(arguments);
+            var elapsed = getTime(watch);
+            __timee__.lastTime = elapsed;
+            logMsg({noLog: noLog}, msg, elapsed);
+            args[0].apply(this, sliceArgs(args, 1));
+        });
+    } else if ('sync' === mode) {
+        __timee__ = intercept.sync(fn, function() {
+            var args = sliceArgs(arguments);
+            var watch = new HRStopwatch();
+            var result = args[0].apply(this, sliceArgs(args, 1));
+            var elapsed = getTime(watch);
             __timee__.lastTime = elapsed;
             logMsg(options, msg, elapsed);
             return result;
-        }
+        });
+    } else if ('promise' === mode) {
+        __timee__ = intercept.sync(fn, function() {
+            var args = sliceArgs(arguments);
+            var watch = new HRStopwatch();
+            var p = args[0].apply(this, sliceArgs(args, 1));
+            p.then(function(result) {
+                var elapsed = getTime(watch);
+                __timee__.lastTime = elapsed;
+                logMsg(options, msg, elapsed);
+                return result;
+            });
+            return p;
+        });
+    } else {
+        throw new Error('Unknown mode: ' + mode);
     }
     return __timee__;
-}
-
-/*
-* The function to inject as the callback to the async timee.
-*/
-function getInjector(options, cb) {
-    return function() {
-        var elapsed = getTime(options.watch);
-        options.__timee__.lastTime = elapsed;
-        logMsg(options, options.msg, elapsed);
-        cb.apply(this, arguments);
-    }
 }
 
 /*
@@ -111,10 +120,10 @@ function invalid(msg) {
 * convert an arguments object into an array. We do it this way because
 * mdn warns us not to use Array.prototype.slice.
 */
-function sliceArgs(args) {
+function sliceArgs(args, start) {
     var array = [];
     for (prop in args) {
-        array.push(args[prop]);
+        if (!start || +prop >= start) array.push(args[prop]);
     }
     return array;
 }
