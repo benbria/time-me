@@ -74,8 +74,9 @@ function timeMe(mode, options, fn) {
         });
     } else if ('sync' === mode) {
         __timee__ = intercept.sync(fn, function() {
+            var args = sliceArgs(arguments);
             var watch = new HRStopwatch();
-            var result = fn.apply(this, arguments);
+            var result = args[0].apply(this, sliceArgs(args, 1));
             elapsed = getTime(watch);
             __timee__.lastTime = elapsed;
             logMsg(options, msg, elapsed);
@@ -83,8 +84,9 @@ function timeMe(mode, options, fn) {
         });
     } else if ('promise' === mode) {
         __timee__ = intercept.sync(fn, function() {
+            var args = sliceArgs(arguments);
             var watch = new HRStopwatch();
-            var p = fn.apply(this, arguments);
+            var p = args[0].apply(this, sliceArgs(args, 1));
             p.then(function(result) {
                 elapsed = getTime(watch);
                 __timee__.lastTime = elapsed;
