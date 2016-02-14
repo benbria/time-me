@@ -77,7 +77,7 @@ function timeMe(mode, options, fn) {
             var args = sliceArgs(arguments);
             var watch = new HRStopwatch();
             var result = args[0].apply(this, sliceArgs(args, 1));
-            elapsed = getTime(watch);
+            var elapsed = getTime(watch);
             __timee__.lastTime = elapsed;
             logMsg(options, msg, elapsed);
             return result;
@@ -88,7 +88,7 @@ function timeMe(mode, options, fn) {
             var watch = new HRStopwatch();
             var p = args[0].apply(this, sliceArgs(args, 1));
             p.then(function(result) {
-                elapsed = getTime(watch);
+                var elapsed = getTime(watch);
                 __timee__.lastTime = elapsed;
                 logMsg(options, msg, elapsed);
                 return result;
