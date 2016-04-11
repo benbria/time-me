@@ -2,7 +2,8 @@ var HRStopwatch = require('hrstopwatch')
 , timeunit = require ('timeunit')
 , intercept = require('fn-intercept')
 , log = console.log
-, DEFAULT_PREFIX = "timeMe";
+, DEFAULT_PREFIX = 'timeMe'
+, enabled = true;
 
 /*
 * Globally configure the module
@@ -12,6 +13,7 @@ var HRStopwatch = require('hrstopwatch')
 exports.configure = function(options) {
     options = options || {};
     log = options.log;
+    enabled = 'boolean' === typeof(options.enabled) ? options.enabled : enabled;
 }
 
 exports.async = function(options, fn) {
@@ -54,6 +56,9 @@ function timeMe(mode, options, fn) {
     } else if ("function" === typeof options) {
         fn = options;
         options = {};
+    }
+    if (!enabled) {
+        return fn;
     }
     msg = options.msg || msg;
     var index = options.index,

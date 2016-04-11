@@ -31,6 +31,7 @@ exports.stubLogger = function() {
 
         attach: function(options) {
             timeMe.configure(ld.assign({}, options, {
+                enabled: true,
                 log: function(str, obj) {
                     var prefix = [], elapsed = [];
                     expect(arguments).to.have.length(2);

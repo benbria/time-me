@@ -12,7 +12,7 @@ describe('sync', function() {
     it('should time a sync function', function() {
         var msg = 'baz()';
         stubLogger.setMsg(msg);
-        baz = timeMe.sync(msg, function(x) {
+        var baz = timeMe.sync(msg, function(x) {
             expect(typeof(x)).to.eq('number');
             var a = [];
             for(var i=0; i < 100000; i++) {
