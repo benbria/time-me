@@ -12,7 +12,7 @@ var HRStopwatch = require('hrstopwatch')
 */
 exports.configure = function(options) {
     options = options || {};
-    log = options.log;
+    log = 'function' === typeof(options.log) ? options.log : log;
     enabled = 'boolean' === typeof(options.enabled) ? options.enabled : enabled;
 }
 
