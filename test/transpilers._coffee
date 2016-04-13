@@ -10,7 +10,7 @@ describe 'async - coffee and streamline', ->
 
     describe 'coffee', ->
         it 'should work with coffee', (done) ->
-            t = Math.lOOms()
+            t = Math.lOOms() + 3
             foo = timeMe.async (cb) ->
                 setTimeout ->
                     cb null, 2
@@ -22,7 +22,7 @@ describe 'async - coffee and streamline', ->
 
     describe 'streamline', ->
         it 'should work with streamline', (_) ->
-            t = Math.lOOms()
+            t = Math.lOOms() + 3
             foo = timeMe.async (a, b, c, _) ->
                 setTimeout _, t
                 return a + b + c
@@ -32,7 +32,7 @@ describe 'async - coffee and streamline', ->
             expect(foo.lastTime).to.be.at.least(t)
 
         it 'should work with streamline cb in a different position than last', (_) ->
-            t = Math.lOOms()
+            t = Math.lOOms() + 3
             foo = timeMe.async {index: 1}, (a, _, b, c) ->
                 setTimeout _, t
                 return a + b + c

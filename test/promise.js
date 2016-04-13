@@ -20,7 +20,7 @@ describe('promise', function() {
             return new Promise(function(res, rej) {
                 setTimeout(function() {
                     res(x);
-                }, 70);
+                }, 70 + 3);
             });
         });
         var p = baz.call(null, 1);

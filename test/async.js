@@ -14,7 +14,7 @@ describe('async', function() {
         it('(msg, cb)', function(done) {
             var msg = 'foo()';
             stubLogger.setMsg(msg);
-            var t = Math.lOOms(),
+            var t = Math.lOOms() + 3,
             foo = timeMe.async(msg, function(cb) {
                 setTimeout(function() {
                     cb(null, '25');
@@ -29,7 +29,7 @@ describe('async', function() {
         it('({msg, index}, cb)', function(done) {
             var msg = 'bar()';
             stubLogger.setMsg(msg);
-            var t = Math.lOOms(),
+            var t = Math.lOOms() + 3,
             bar = timeMe.async({msg: msg, index: 1}, function(x, cb, y) {
                 setTimeout(function() {
                     cb(null, x + y);
@@ -43,7 +43,7 @@ describe('async', function() {
         });
 
         it('({msg, index, noLog:1}, cb) - log not called', function(done) {
-            var t = Math.lOOms(),
+            var t = Math.lOOms() + 3,
             spy = sinon.spy(),
             dontLogMe = timeMe.async({
                 msg: 'dontLogMe()',
@@ -64,7 +64,7 @@ describe('async', function() {
         it('(cb)', function(done) {
             var msg = 'timeMe';
             stubLogger.setMsg(msg);
-            var t = Math.lOOms(),
+            var t = Math.lOOms() + 3,
             baz = timeMe.async(function(cb) {
                 setTimeout(function() {
                     cb(null, 1);
@@ -77,7 +77,7 @@ describe('async', function() {
         });
 
         it('({}, cb) - default log message', function(done) {
-            var t = Math.lOOms();
+            var t = Math.lOOms() + 3;
             timeMe.configure({log: function(msg) {
                 expect(/timeMe/.test(msg)).to.be.ok;
             }});
@@ -97,7 +97,7 @@ describe('async', function() {
         it('should keep the context of this', function(done) {
             var msg = 'foo()';
             stubLogger.setMsg(msg);
-            var t = Math.lOOms(),
+            var t = Math.lOOms() + 3,
             foo = timeMe.async(msg, function(cb) {
                 var self = this;
                 expect(this.x).to.eq(1);
