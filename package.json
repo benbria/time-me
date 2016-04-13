@@ -11,14 +11,17 @@
   "devDependencies": {
     "chai": "^2.1.1",
     "coffee-script": "^1.9.1",
+    "coveralls": "^2.11.9",
     "es6-promise": "^3.0.2",
+    "istanbul": "^0.4.3",
     "lodash": "^3.9.3",
     "mocha": "^2.2.1",
     "sinon": "^1.13.0",
     "streamline": "^0.10.17"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha"
+    "test": "./node_modules/.bin/mocha",
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha"
   },
   "repository": {
     "type": "git",
