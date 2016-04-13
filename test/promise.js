@@ -15,18 +15,19 @@ describe('promise', function() {
     it('should time a promise function', function(done) {
         var msg = 'baz()';
         stubLogger.setMsg(msg);
+        var t = Math.lOOms();
         var baz = timeMe.promise(msg, function(x) {
             expect(typeof(x)).to.eq('number');
             return new Promise(function(res, rej) {
                 setTimeout(function() {
                     res(x);
-                }, 70 + 3);
+                }, t);
             });
         });
         var p = baz.call(null, 1);
         p.then(function(result) {
             expect(result).to.eq(1);
-            expect(baz.lastTime).to.be.at.least(70);
+            expect(baz.lastTime + 1).to.be.at.least(t);
             done();
         });
     });
