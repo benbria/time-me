@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/benbria/time-me.svg?branch=master)](https://travis-ci.org/benbria/time-me)
+
 # timeMe!
 
 Time a block of code with minimal effort.
